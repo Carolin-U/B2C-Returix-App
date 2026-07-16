@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Returix — Nie wieder eine Rückgabefrist verpassen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       RETURIX B2C — Designsystem (identisch zu Returix Business)
+       Cream/Ink/Stone-Palette, Playfair Display + Roboto
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       #F5F3EE;
+      --white:       #FFFFFF;
+      --ink:         #0E0E0C;
+      --stone:       #E8E5DE;
+      --stone-dark:  #D4D0C8;
+      --warm-grey:   #5A5A56;
+      --muted-grey:  #9A9A95;
+      --green:       #1A5E38;
+      --green-l:     #EAF3EE;
+      --green-b:     #B8D6C4;
+      --amber:       #92550A;
+      --amber-l:     #FDF4E8;
+      --amber-b:     #E8C98A;
+      --red:         #B83232;
+      --red-l:       #FDF0F0;
+      --red-b:       #E8AAAA;
+
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'Roboto', system-ui, sans-serif;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: flex; flex-direction: column; min-height: 100dvh; }
+
+    /* ──────────────────────────────
+       AUTH SCREEN
+    ────────────────────────────── */
+    #screen-auth { align-items: center; justify-content: center; padding: 48px 24px; }
+    .auth-box { width: 100%; max-width: 420px; text-align: center; }
+
+    .auth-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 40px; }
+    .logo-mark {
+      width: 38px; height: 38px; border-radius: 26%;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .logo-mark svg { width: 100%; height: 100%; display: block; }
+    .auth-logo-name { font-family: var(--font-serif); font-style: italic; font-size: 22px; letter-spacing: -0.3px; }
+
+    .auth-headline {
+      font-family: var(--font-serif); font-style: italic; font-weight: 400;
+      font-size: clamp(28px, 6vw, 38px); line-height: 1.15; letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .auth-sub {
+      font-size: 15px; font-weight: 300; color: var(--warm-grey);
+      line-height: 1.75; margin: 0 auto 32px; max-width: 360px;
+    }
+
+    .auth-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; text-align: left; }
+    .auth-feature {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--white); border: 1px solid var(--stone);
+      border-radius: var(--r-md); padding: 13px 16px;
+    }
+    .auth-feature-icon {
+      width: 34px; height: 34px; background: var(--green-l); border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--green);
+    }
+    .auth-feature-title { font-size: 13px; font-weight: 500; }
+    .auth-feature-desc { font-size: 12px; color: var(--muted-grey); }
+    .premium-tag {
+      display: inline-block; margin-left: 8px;
+      font-size: 9px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--amber-l); color: var(--amber);
+      border-radius: 99px; padding: 1px 8px; vertical-align: 1px;
+    }
+
+    .auth-tabs {
+      display: flex; background: var(--stone); border-radius: 99px; padding: 3px; margin-bottom: 18px;
+    }
+    .auth-tab {
+      flex: 1; border: none; background: transparent; cursor: pointer;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--warm-grey); border-radius: 99px; padding: 8px 0;
+      transition: all 0.15s;
+    }
+    .auth-tab.active { background: var(--white); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+    .auth-input {
+      width: 100%; background: var(--white);
+      border: 1px solid var(--stone-dark); border-radius: var(--r-md);
+      padding: 14px 16px; font-family: var(--font-sans); font-size: 15px;
+      color: var(--ink); margin-bottom: 12px; outline: none;
+      transition: border-color 0.15s;
+    }
+    .auth-input:focus { border-color: var(--ink); }
+
+    .otp-hint { font-size: 13px; color: var(--warm-grey); margin-bottom: 10px; }
+    .otp-input {
+      text-align: center;
+      font-size: 20px;
+      letter-spacing: 0.35em;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+    .otp-input::placeholder {
+      font-size: 14px;
+      letter-spacing: 0.35em;
+      font-weight: 400;
+      color: var(--stone-dark);
+    }
+
+    .btn-primary {
+      width: 100%; background: var(--ink); color: var(--cream);
+      border: none; border-radius: var(--r-md); padding: 14px 24px;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .auth-alt { margin-top: 14px; font-size: 12.5px; color: var(--muted-grey); }
+    .link-btn {
+      background: none; border: none; font-family: var(--font-sans);
+      font-size: 12.5px; font-weight: 500; color: var(--green);
+      cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0;
+    }
+    .auth-privacy { font-size: 11px; color: var(--muted-grey); line-height: 1.6; margin-top: 18px; }
+
+    .auth-notice {
+      background: var(--green-l); border: 1px solid var(--green-b);
+      border-radius: var(--r-md); padding: 14px 16px;
+      font-size: 13px; color: var(--green); text-align: left;
+      margin-bottom: 14px; display: none;
+    }
+    .auth-notice.error { background: var(--red-l); border-color: var(--red-b); color: var(--red); }
+    .auth-notice.show { display: block; }
+
+    /* ──────────────────────────────
+       APP SHELL
+    ────────────────────────────── */
+    .app-header { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--stone); }
+    .app-header-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 56px; border-bottom: 1px solid var(--stone);
+    }
+    .app-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .app-logo .logo-mark { width: 28px; height: 28px; }
+    .app-logo-name { font-family: var(--font-serif); font-style: italic; font-size: 18px; letter-spacing: -0.3px; }
+
+    .app-header-right { display: flex; align-items: center; gap: 10px; }
+    .plan-badge {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 99px; padding: 4px 13px; cursor: pointer; border: 1px solid var(--stone);
+      background: var(--cream); color: var(--warm-grey);
+    }
+    .plan-badge.premium { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    .user-badge {
+      font-size: 12px; font-weight: 500; background: var(--cream);
+      border: 1px solid var(--stone); border-radius: 99px; padding: 5px 14px; color: var(--warm-grey);
+      max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .btn-logout {
+      background: none; border: none; cursor: pointer; color: var(--muted-grey);
+      display: flex; align-items: center; padding: 6px; border-radius: var(--r-sm);
+    }
+    .btn-logout:hover { color: var(--red); background: var(--red-l); }
+
+    .app-nav-bar { display: flex; align-items: center; padding: 0 32px; height: 42px; overflow-x: auto; scrollbar-width: none; }
+    .app-nav-bar::-webkit-scrollbar { display: none; }
+    .nav-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 14px; height: 42px; border: none; background: transparent; cursor: pointer;
+      font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-grey);
+      white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color 0.12s;
+    }
+    .nav-item:hover { color: var(--warm-grey); }
+    .nav-item.active { color: var(--ink); border-bottom-color: var(--ink); }
+    .nav-pill {
+      font-size: 8px; font-weight: 500; letter-spacing: 0.08em;
+      background: var(--amber-l); color: var(--amber);
+      border-radius: 99px; padding: 1px 7px;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .view-inner { padding: 32px; max-width: 1060px; margin: 0 auto; }
+    .view-inner.narrow { max-width: 760px; }
+    .view-title { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 28px; letter-spacing: -0.4px; margin-bottom: 4px; }
+    .view-subtitle { font-size: 14px; font-weight: 300; color: var(--warm-grey); margin-bottom: 28px; }
+    .view-head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    /* ── Cards & KPIs ── */
+    .card {
+      background: var(--white); border: 1px solid var(--stone);
+      border-radius: var(--r-lg); padding: 24px; box-shadow: var(--shadow-sm);
+    }
+    .card + .card { margin-top: 16px; }
+    .card-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted-grey); margin-bottom: 12px;
+    }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+    .kpi-card { background: var(--white); border: 1px solid var(--stone); border-radius: var(--r-lg); padding: 20px 22px; box-shadow: var(--shadow-sm); }
+    .kpi-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-grey); margin-bottom: 8px; }
+    .kpi-value { font-family: var(--font-serif); font-size: 30px; letter-spacing: -0.5px; line-height: 1.1; }
+    .kpi-value.red { color: var(--red); } .kpi-value.green { color: var(--green); } .kpi-value.amber { color: var(--amber); }
+    .kpi-sub { font-size: 11px; color: var(--muted-grey); margin-top: 6px; }
+
+    /* ── Fristen-Liste ── */
+    .deadline-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--stone);
+    }
+    .deadline-row:last-child { border-bottom: none; }
+    .deadline-days {
+      flex-shrink: 0; width: 74px; text-align: center;
+      font-size: 12px; font-weight: 500; border-radius: 99px; padding: 4px 0;
+    }
+    .deadline-days.ok   { background: var(--green-l); color: var(--green); }
+    .deadline-days.warn { background: var(--amber-l); color: var(--amber); }
+    .deadline-days.bad  { background: var(--red-l);   color: var(--red); }
+    .deadline-days.off  { background: var(--stone);   color: var(--warm-grey); }
+    .deadline-main { flex: 1; min-width: 0; }
+    .deadline-title { font-size: 13.5px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .deadline-meta { font-size: 12px; color: var(--muted-grey); }
+    .deadline-amount { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 500; white-space: nowrap; }
+    .deadline-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-mini {
+      background: var(--white); border: 1px solid var(--stone-dark);
+      border-radius: 99px; padding: 5px 12px;
+      font-family: var(--font-sans); font-size: 11.5px; font-weight: 500;
+      color: var(--warm-grey); cursor: pointer; white-space: nowrap;
+      transition: all 0.12s;
+    }
+    .btn-mini:hover { border-color: var(--ink); color: var(--ink); }
+    .btn-mini.green:hover { border-color: var(--green); color: var(--green); background: var(--green-l); }
+    .btn-mini.red:hover { border-color: var(--red); color: var(--red); background: var(--red-l); }
+
+    .status-pill { display: inline-block; font-size: 11px; font-weight: 500; border-radius: 99px; padding: 2px 10px; }
+    .status-pill.ok   { background: var(--green-l); color: var(--green); }
+    .status-pill.warn { background: var(--amber-l); color: var(--amber); }
+    .status-pill.bad  { background: var(--red-l);   color: var(--red); }
+    .status-pill.off  { background: var(--stone);   color: var(--warm-grey); }
+
+    /* ── Tabellen ── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table thead th {
+      text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted-grey); padding: 8px 12px; border-bottom: 1px solid var(--stone); white-space: nowrap;
+    }
+    .data-table tbody td { padding: 11px 12px; font-size: 13px; border-bottom: 1px solid var(--stone); vertical-align: top; }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .data-table th.num { text-align: right; }
+    .table-scroll { overflow-x: auto; }
+
+    /* ── Buttons ── */
+    .btn-inline {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: var(--cream);
+      border: none; border-radius: var(--r-md); padding: 11px 20px;
+      font-family: var(--font-sans); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-inline:hover { opacity: 0.85; }
+    .btn-inline:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-secondary {
+      background: var(--white); color: var(--ink);
+      border: 1px solid var(--stone-dark); border-radius: var(--r-md);
+      padding: 11px 20px; font-family: var(--font-sans); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; transition: box-shadow 0.15s;
+    }
+    .btn-secondary:hover { box-shadow: var(--shadow-md); }
+    .btn-danger {
+      background: transparent; color: var(--red); border: 1px solid var(--red-b);
+      border-radius: var(--r-md); padding: 10px 18px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 500; cursor: pointer;
+    }
+    .btn-danger:hover { background: var(--red-l); }
+
+    /* ── Empty State ── */
+    .empty-state { text-align: center; padding: 56px 24px; background: var(--white); border: 1px dashed var(--stone-dark); border-radius: var(--r-lg); }
+    .empty-state-icon {
+      width: 56px; height: 56px; background: var(--green-l); color: var(--green);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    }
+    .empty-state h3 { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 22px; margin-bottom: 8px; }
+    .empty-state p { font-size: 13.5px; font-weight: 300; color: var(--warm-grey); max-width: 420px; margin: 0 auto 22px; }
+
+    /* ── Filter ── */
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-chip {
+      border: 1px solid var(--stone-dark); background: var(--white); border-radius: 99px;
+      padding: 5px 14px; font-family: var(--font-sans); font-size: 12px; font-weight: 500;
+      color: var(--warm-grey); cursor: pointer; transition: all 0.12s;
+    }
+    .filter-chip.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+    /* ── Premium Lock ── */
+    .premium-lock { text-align: center; padding: 56px 24px; background: linear-gradient(135deg, var(--amber-l), var(--white)); border: 1px solid var(--amber-b); border-radius: var(--r-lg); }
+    .premium-lock-icon {
+      width: 56px; height: 56px; background: var(--ink); color: var(--cream);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    }
+    .premium-lock h3 { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 24px; margin-bottom: 8px; }
+    .premium-lock p { font-size: 13.5px; font-weight: 300; color: var(--warm-grey); max-width: 460px; margin: 0 auto 22px; }
+    .free-limit-note {
+      background: var(--amber-l); border: 1px solid var(--amber-b); border-radius: var(--r-md);
+      padding: 12px 16px; font-size: 12.5px; color: var(--amber); margin-bottom: 16px;
+    }
+    .free-limit-note .link-btn { color: var(--amber); }
+
+    /* ── Insights ── */
+    .chart-wrap { width: 100%; overflow: hidden; }
+    .chart-wrap svg { display: block; width: 100%; height: auto; }
+    .reason-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .reason-row:last-child { margin-bottom: 0; }
+    .reason-name { flex: 0 0 168px; font-size: 12.5px; color: var(--warm-grey); }
+    .reason-track { flex: 1; height: 8px; background: var(--cream); border-radius: 99px; overflow: hidden; }
+    .reason-fill { height: 100%; border-radius: 99px; background: var(--green); transition: width 0.4s ease; }
+    .reason-pct { flex: 0 0 64px; text-align: right; font-size: 12.5px; font-weight: 500; }
+    .dash-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-bottom: 16px; }
+
+    /* ── Settings ── */
+    .settings-row { padding: 18px 0; border-bottom: 1px solid var(--stone); }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .settings-row-desc { font-size: 12.5px; color: var(--warm-grey); margin-bottom: 12px; max-width: 520px; }
+    .settings-input {
+      width: 100%; max-width: 420px; background: var(--cream);
+      border: 1px solid var(--stone-dark); border-radius: var(--r-sm);
+      padding: 10px 14px; font-family: var(--font-sans); font-size: 13.5px; outline: none;
+    }
+    .settings-input:focus { border-color: var(--ink); background: var(--white); }
+    .settings-inline { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(14,14,12,0.4);
+      display: none; justify-content: center;
+      padding: 24px 16px; overflow-y: auto;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--white); border-radius: var(--r-lg);
+      width: 100%; max-width: 480px; padding: 28px;
+      box-shadow: var(--shadow-md); animation: fadeIn 0.18s ease;
+      margin: auto; /* zentriert vertikal & horizontal; scrollt sauber, wenn höher als der Bildschirm */
+      height: fit-content;
+    }
+    .modal h3 { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 22px; margin-bottom: 4px; }
+    .modal-sub { font-size: 13px; font-weight: 300; color: var(--warm-grey); margin-bottom: 20px; }
+    .modal label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-grey); margin: 12px 0 5px; }
+    .modal input, .modal select, .modal textarea {
+      width: 100%; background: var(--cream);
+      border: 1px solid var(--stone-dark); border-radius: var(--r-sm);
+      padding: 10px 13px; font-family: var(--font-sans); font-size: 13.5px; outline: none; color: var(--ink);
+    }
+    .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: var(--ink); background: var(--white); }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+    /* Premium-Modal */
+    .price-line { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin: 14px 0 4px; }
+    .price-big { font-family: var(--font-serif); font-size: 42px; letter-spacing: -1px; }
+    .price-per { font-size: 13px; color: var(--muted-grey); }
+    .price-alt { text-align: center; font-size: 12.5px; color: var(--green); font-weight: 500; margin-bottom: 16px; }
+    .prem-list { text-align: left; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .prem-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--cream); border: 1px solid var(--stone);
+      border-radius: var(--r-md); padding: 12px 14px;
+    }
+    .prem-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: var(--green-l); color: var(--green);
+      border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .prem-title { font-size: 13px; font-weight: 500; margin-bottom: 1px; }
+    .prem-desc { font-size: 11.5px; color: var(--muted-grey); line-height: 1.55; }
+    .prem-desc em { font-style: normal; color: var(--amber); font-weight: 500; }
+    .prem-roi {
+      text-align: center; font-size: 12px; color: var(--warm-grey);
+      background: var(--green-l); border: 1px solid var(--green-b); border-radius: var(--r-md);
+      padding: 10px 14px; margin-bottom: 4px;
+    }
+    .prem-roi strong { color: var(--green); font-weight: 500; }
+
+    /* ── Onboarding & Checkliste ── */
+    .onb-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; }
+    .onb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--stone-dark); transition: all 0.2s; }
+    .onb-dot.active { background: var(--ink); width: 20px; border-radius: 99px; }
+    .onb-illu {
+      width: 56px; height: 56px; background: var(--green-l); color: var(--green);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+    }
+    .copy-field {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--cream); border: 1px dashed var(--stone-dark); border-radius: var(--r-md);
+      padding: 12px 14px; margin: 14px 0;
+    }
+    .copy-field code { flex: 1; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+    .onb-instructions { text-align: left; background: var(--cream); border-radius: var(--r-md); padding: 14px 16px; margin: 12px 0; }
+    .onb-instructions li { font-size: 12.5px; color: var(--warm-grey); margin: 6px 0 6px 18px; }
+    .beta-pill {
+      display: inline-block; font-size: 9px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--amber-l); color: var(--amber); border-radius: 99px; padding: 2px 9px; vertical-align: 2px;
+    }
+    .check-card { margin-bottom: 16px; }
+    .check-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .check-progress { font-size: 12px; color: var(--muted-grey); }
+    .check-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--stone); }
+    .check-item:last-child { border-bottom: none; }
+    .check-mark {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid var(--stone-dark); background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 12px; color: var(--warm-grey);
+    }
+    .check-item.done .check-mark { background: var(--green-l); border-color: var(--green-b); color: var(--green); }
+    .check-item.done .check-title { text-decoration: line-through; color: var(--muted-grey); }
+    .check-title { font-size: 13px; font-weight: 500; flex: 1; }
+    .check-sub { font-size: 11.5px; color: var(--muted-grey); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translate(-50%, 20px);
+      background: var(--ink); color: var(--cream);
+      border-radius: var(--r-md); padding: 12px 22px; font-size: 13px;
+      box-shadow: var(--shadow-md); opacity: 0; pointer-events: none;
+      transition: all 0.25s ease; z-index: 999;
+      max-width: min(90vw, 480px); text-align: center;
+    }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-grid { grid-template-columns: 1fr; }
+      .app-header-top, .app-nav-bar { padding: 0 16px; }
+      .view-inner { padding: 20px 16px; }
+      .reason-name { flex-basis: 120px; }
+      .table-scroll .data-table { min-width: 640px; }
+      .user-badge { display: none; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .kpi-value { font-size: 24px; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+      .deadline-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<!-- ══════════════ AUTH ══════════════ -->
+<div id="screen-auth" class="screen active">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Returix Logo"><rect x="31" y="31" width="38" height="38" rx="10" fill="#FFFFFF"/><path d="M45.5 42h8.2v7.7H62L50 61 38 49.7h7.5z" fill="#0E0E0C"/></svg>
+      </div>
+      <div class="auth-logo-name">Returix</div>
+    </div>
+
+    <h1 class="auth-headline">Nie wieder eine<br>Rückgabefrist verpassen.</h1>
+    <p class="auth-sub">Alle Bestellungen, Fristen, Garantien und Pakete — shopübergreifend in einem Dashboard.</p>
+
+    <div class="auth-features">
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div>
+          <div class="auth-feature-title">Retouren-Fristen im Blick</div>
+          <div class="auth-feature-desc">Jede Rückgabefrist mit Ampel-Countdown — sortiert nach Dringlichkeit.</div>
+        </div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>
+        </div>
+        <div>
+          <div class="auth-feature-title">Garantie-Tresor <span class="premium-tag">Premium</span></div>
+          <div class="auth-feature-desc">Rechnungen, Gewährleistung &amp; Herstellergarantie — mit Erinnerung vor Ablauf.</div>
+        </div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+        </div>
+        <div>
+          <div class="auth-feature-title">Paket-Tracking &amp; Ausgaben-Insights <span class="premium-tag">Premium</span></div>
+          <div class="auth-feature-desc">Alle Sendungen und dein Shopping-Jahr auf einen Blick.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="setAuthMode('login')">Anmelden</button>
+      <button class="auth-tab" id="tab-signup" onclick="setAuthMode('signup')">Registrieren</button>
+    </div>
+
+    <div id="auth-notice" class="auth-notice"></div>
+
+    <!-- Code-Eingabe nach Registrierung (OTP aus der Bestätigungs-Mail) -->
+    <div id="otp-block" style="display:none">
+      <p class="otp-hint">Gib den 6-stelligen Code aus der E-Mail ein:</p>
+      <input type="text" id="otp-code" class="auth-input otp-input" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+      <button class="btn-primary" onclick="verifyOtpCode()">Code bestätigen →</button>
+      <p class="auth-alt"><button class="link-btn" onclick="resendCode()">Code erneut senden</button></p>
+    </div>
+
+    <form id="auth-form" onsubmit="return handleAuth(event)">
+      <input type="text" id="auth-name" class="auth-input" placeholder="Dein Name" autocomplete="name" style="display:none">
+      <input type="email" id="auth-email" class="auth-input" placeholder="E-Mail-Adresse" autocomplete="email" required>
+      <input type="password" id="auth-password" class="auth-input" placeholder="Passwort (mind. 6 Zeichen)" autocomplete="current-password" required minlength="6">
+      <button type="submit" class="btn-primary" id="auth-submit">Anmelden →</button>
+    </form>
+    <p class="auth-alt" id="auth-forgot"><button class="link-btn" onclick="forgotPassword()">Passwort vergessen?</button></p>
+    <p class="auth-privacy">Deine Daten liegen verschlüsselt in deinem persönlichen Returix-Konto (EU-Server, Frankreich). Kein Verkauf, keine Weitergabe.</p>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="screen-app" class="screen">
+  <header class="app-header">
+    <div class="app-header-top">
+      <div class="app-logo" onclick="showView('dashboard')">
+        <div class="logo-mark">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Returix Logo"><rect x="31" y="31" width="38" height="38" rx="10" fill="#FFFFFF"/><path d="M45.5 42h8.2v7.7H62L50 61 38 49.7h7.5z" fill="#0E0E0C"/></svg>
+        </div>
+        <div class="app-logo-name">Returix</div>
+      </div>
+      <div class="app-header-right">
+        <button class="plan-badge" id="plan-badge" onclick="openPremiumModal()">Free</button>
+        <div class="user-badge" id="user-badge">—</div>
+        <button class="btn-logout" onclick="doLogout()" title="Abmelden">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="app-nav-bar">
+      <button class="nav-item active" id="nav-dashboard" onclick="showView('dashboard')">Übersicht</button>
+      <button class="nav-item" id="nav-bestellungen" onclick="showView('bestellungen')">Bestellungen</button>
+      <button class="nav-item" id="nav-garantien" onclick="showView('garantien')">Garantie-Tresor <span class="nav-pill" data-premium-pill>Premium</span></button>
+      <button class="nav-item" id="nav-pakete" onclick="showView('pakete')">Pakete <span class="nav-pill" data-premium-pill>Premium</span></button>
+      <button class="nav-item" id="nav-insights" onclick="showView('insights')">Insights <span class="nav-pill" data-premium-pill>Premium</span></button>
+      <button class="nav-item" id="nav-profil" onclick="showView('profil')">Profil</button>
+    </nav>
+  </header>
+
+  <!-- ── Übersicht ── -->
+  <section class="view active" id="view-dashboard">
+    <div class="view-inner">
+      <div class="view-head-row">
+        <div>
+          <h2 class="view-title" id="dash-greeting">Deine Fristen</h2>
+          <p class="view-subtitle">Alles, was noch zurückgeschickt werden kann — sortiert nach Dringlichkeit.</p>
+        </div>
+        <button class="btn-inline" onclick="openOrderModal()">+ Bestellung erfassen</button>
+      </div>
+      <div id="dash-checklist"></div>
+      <div id="dash-free-note"></div>
+      <div class="kpi-grid" id="dash-kpis"></div>
+      <div class="card">
+        <div class="card-label">Laufende Rückgabefristen</div>
+        <div id="dash-deadlines"></div>
+      </div>
+      <div class="card" id="dash-refunds-card" style="display:none">
+        <div class="card-label">Offene Erstattungen</div>
+        <div id="dash-refunds"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Bestellungen ── -->
+  <section class="view" id="view-bestellungen">
+    <div class="view-inner">
+      <div class="view-head-row">
+        <div>
+          <h2 class="view-title">Bestellungen</h2>
+          <p class="view-subtitle">Deine komplette Bestell- und Retouren-Historie.</p>
+        </div>
+        <button class="btn-inline" onclick="openOrderModal()">+ Bestellung erfassen</button>
+      </div>
+      <div class="filter-row" id="order-filters">
+        <button class="filter-chip active" data-f="alle" onclick="setOrderFilter('alle')">Alle</button>
+        <button class="filter-chip" data-f="active" onclick="setOrderFilter('active')">Frist läuft</button>
+        <button class="filter-chip" data-f="returned" onclick="setOrderFilter('returned')">Retourniert</button>
+        <button class="filter-chip" data-f="kept" onclick="setOrderFilter('kept')">Behalten</button>
+      </div>
+      <div class="card">
+        <div class="table-scroll">
+          <div id="orders-table"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Garantie-Tresor ── -->
+  <section class="view" id="view-garantien">
+    <div class="view-inner">
+      <div class="view-head-row">
+        <div>
+          <h2 class="view-title">Garantie-Tresor</h2>
+          <p class="view-subtitle">Gewährleistung und Herstellergarantien — mit Countdown bis zum Ablauf.</p>
+        </div>
+        <button class="btn-inline" id="warranty-add-btn" onclick="openWarrantyModal()">+ Garantie sichern</button>
+      </div>
+      <div id="warranties-content"></div>
+    </div>
+  </section>
+
+  <!-- ── Pakete ── -->
+  <section class="view" id="view-pakete">
+    <div class="view-inner">
+      <div class="view-head-row">
+        <div>
+          <h2 class="view-title">Pakete</h2>
+          <p class="view-subtitle">Lieferungen und Retouren-Sendungen shopübergreifend verfolgen.</p>
+        </div>
+        <button class="btn-inline" id="shipment-add-btn" onclick="openShipmentModal()">+ Sendung hinzufügen</button>
+      </div>
+      <div id="shipments-content"></div>
+    </div>
+  </section>
+
+  <!-- ── Insights ── -->
+  <section class="view" id="view-insights">
+    <div class="view-inner">
+      <h2 class="view-title">Ausgaben-Insights</h2>
+      <p class="view-subtitle">Dein Shopping-Jahr in Zahlen — Bestellungen, Retouren, Erstattungen.</p>
+      <div id="insights-content"></div>
+    </div>
+  </section>
+
+  <!-- ── Profil ── -->
+  <section class="view" id="view-profil">
+    <div class="view-inner narrow">
+      <h2 class="view-title">Profil &amp; Einstellungen</h2>
+      <p class="view-subtitle">Dein Konto, dein Fit-Profil, dein Plan.</p>
+
+      <div class="card">
+        <div class="card-label">Konto</div>
+        <div class="settings-row">
+          <div class="settings-row-title">Name</div>
+          <div class="settings-inline">
+            <input type="text" id="profile-name" class="settings-input" placeholder="Dein Name">
+            <button class="btn-secondary" onclick="saveProfile()">Speichern</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-title">E-Mail</div>
+          <div class="settings-row-desc" id="profile-email">—</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-title">Plan</div>
+          <div class="settings-row-desc" id="profile-plan-desc">—</div>
+          <button class="btn-secondary" id="profile-plan-btn" onclick="openPremiumModal()">Premium ansehen</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Postfach-Import <span class="beta-pill">Beta</span></div>
+        <div class="settings-row">
+          <div class="settings-row-desc">Leite Bestellbestätigungen an deine persönliche Returix-Adresse weiter — Bestellungen und Fristen werden automatisch erfasst. Die Mail wird nach dem Auslesen sofort verworfen, gespeichert werden nur Shop, Datum, Betrag und Frist.</div>
+          <div class="copy-field">
+            <code id="forward-alias-display">—</code>
+            <button class="btn-mini" onclick="copyAlias()">Kopieren</button>
+          </div>
+          <div id="mailbox-status"></div>
+          <div style="margin-top:10px">
+            <button class="link-btn" onclick="toggleInstructions()">Anleitung für Gmail anzeigen</button>
+          </div>
+          <div class="onb-instructions" id="gmail-instructions" style="display:none">
+            <ol>
+              <li>Gmail öffnen → Zahnrad → „Alle Einstellungen aufrufen" → Tab „Weiterleitung &amp; POP/IMAP" → Weiterleitungs-Adresse hinzufügen (deine Returix-Adresse oben).</li>
+              <li>Tab „Filter &amp; blockierte Adressen" → „Neuen Filter erstellen" → bei „Von": <em>zalando.de OR amazon.de OR otto.de OR aboutyou.de</em> → „Filter erstellen".</li>
+              <li>Haken bei „Weiterleiten an" → deine Returix-Adresse wählen → Filter speichern. Fertig — ab jetzt landet jede Bestellung automatisch in Returix.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Fit-Profil (für spätere Größen-Empfehlungen)</div>
+        <div class="settings-row">
+          <div class="settings-row-desc">Deine Maße bleiben privat und verbessern künftig die Passform-Empfehlungen.</div>
+          <div class="form-grid-2">
+            <div><input type="number" id="fit-height" class="settings-input" placeholder="Größe (cm)"></div>
+            <div><input type="number" id="fit-weight" class="settings-input" placeholder="Gewicht (kg)"></div>
+            <div><input type="text" id="fit-size" class="settings-input" placeholder="Konfektionsgröße (z. B. M / 38)"></div>
+            <div><input type="text" id="fit-shoe" class="settings-input" placeholder="Schuhgröße (z. B. 39)"></div>
+          </div>
+          <div style="margin-top:12px"><button class="btn-secondary" onclick="saveFitProfile()">Fit-Profil speichern</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Sitzung</div>
+        <div class="settings-row">
+          <div class="settings-row-desc">Du bist auf diesem Gerät angemeldet. Deine Daten sind über dein Konto auf jedem Gerät verfügbar.</div>
+          <button class="btn-danger" onclick="doLogout()">Abmelden</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════ MODALS ══════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) closeModal()">
+
+  <!-- Bestellung -->
+  <div class="modal" id="modal-order" style="display:none">
+    <h3 id="order-modal-title">Bestellung erfassen</h3>
+    <p class="modal-sub">Shop, Produkt und Rückgabefrist — mehr braucht Returix nicht.</p>
+    <form onsubmit="return saveOrder(event)">
+      <input type="hidden" id="o-id">
+      <label>Shop</label>
+      <input type="text" id="o-shop" placeholder="z. B. Zalando" required list="shop-list">
+      <datalist id="shop-list">
+        <option value="Zalando"><option value="Amazon"><option value="About You"><option value="Otto"><option value="H&M"><option value="Asos"><option value="Bonprix"><option value="MediaMarkt"><option value="IKEA">
+      </datalist>
+      <label>Produkt</label>
+      <input type="text" id="o-product" placeholder="z. B. Wollmantel, beige, Gr. M" required>
+      <div class="form-grid-2">
+        <div>
+          <label>Bestelldatum</label>
+          <input type="date" id="o-date" required>
+        </div>
+        <div>
+          <label>Rückgabefrist bis</label>
+          <input type="date" id="o-deadline" required>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div>
+          <label>Betrag (€)</label>
+          <input type="number" step="0.01" min="0" id="o-amount" placeholder="59,95">
+        </div>
+        <div>
+          <label>Bestellnummer (optional)</label>
+          <input type="text" id="o-number" placeholder="10023-...">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+        <button type="submit" class="btn-inline">Speichern</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Retoure -->
+  <div class="modal" id="modal-return" style="display:none">
+    <h3>Als Retoure markieren</h3>
+    <p class="modal-sub" id="return-modal-sub">—</p>
+    <form onsubmit="return saveReturn(event)">
+      <input type="hidden" id="r-order-id">
+      <label>Grund der Retoure</label>
+      <select id="r-reason">
+        <option>Zu klein</option>
+        <option>Zu groß</option>
+        <option>Gefällt nicht</option>
+        <option>Qualität enttäuschend</option>
+        <option>Sieht anders aus als online</option>
+        <option>Defekt / beschädigt</option>
+        <option>Doppelt bestellt</option>
+        <option>Sonstiges</option>
+      </select>
+      <label>Erwartete Erstattung (€)</label>
+      <input type="number" step="0.01" min="0" id="r-refund" placeholder="Betrag der Bestellung">
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+        <button type="submit" class="btn-inline">Retoure speichern</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Garantie -->
+  <div class="modal" id="modal-warranty" style="display:none">
+    <h3 id="warranty-modal-title">Garantie sichern</h3>
+    <p class="modal-sub">Kauf erfassen — Returix zählt Gewährleistung und Garantie rückwärts.</p>
+    <form onsubmit="return saveWarranty(event)">
+      <input type="hidden" id="w-id">
+      <label>Produkt</label>
+      <input type="text" id="w-product" placeholder="z. B. Kaffeevollautomat DeLonghi" required>
+      <div class="form-grid-2">
+        <div>
+          <label>Händler</label>
+          <input type="text" id="w-shop" placeholder="z. B. MediaMarkt">
+        </div>
+        <div>
+          <label>Kategorie</label>
+          <select id="w-category">
+            <option value="elektronik">Elektronik</option>
+            <option value="moebel">Möbel</option>
+            <option value="haushalt">Haushalt</option>
+            <option value="fashion">Fashion</option>
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div>
+          <label>Kaufdatum</label>
+          <input type="date" id="w-date" required>
+        </div>
+        <div>
+          <label>Preis (€)</label>
+          <input type="number" step="0.01" min="0" id="w-price" placeholder="499,00">
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div>
+          <label>Gewährleistung (Monate)</label>
+          <input type="number" id="w-months" value="24" min="1" required>
+        </div>
+        <div>
+          <label>Herstellergarantie (Monate, optional)</label>
+          <input type="number" id="w-mfr" placeholder="z. B. 36">
+        </div>
+      </div>
+      <label>Rechnung / Beleg (Notiz, optional)</label>
+      <input type="text" id="w-invoice" placeholder="z. B. Rechnungs-Nr. oder Ablageort">
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+        <button type="submit" class="btn-inline">Speichern</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Sendung -->
+  <div class="modal" id="modal-shipment" style="display:none">
+    <h3 id="shipment-modal-title">Sendung hinzufügen</h3>
+    <p class="modal-sub">Lieferung oder Retouren-Paket — mit Sendungsnummer direkt zum Carrier-Tracking.</p>
+    <form onsubmit="return saveShipment(event)">
+      <input type="hidden" id="s-id">
+      <label>Bezeichnung</label>
+      <input type="text" id="s-label" placeholder="z. B. Zalando-Paket (Mantel)" required>
+      <div class="form-grid-2">
+        <div>
+          <label>Richtung</label>
+          <select id="s-direction">
+            <option value="inbound">Lieferung an mich</option>
+            <option value="outbound">Retoure an Shop</option>
+          </select>
+        </div>
+        <div>
+          <label>Carrier</label>
+          <select id="s-carrier">
+            <option value="dhl">DHL</option>
+            <option value="hermes">Hermes</option>
+            <option value="dpd">DPD</option>
+            <option value="gls">GLS</option>
+            <option value="ups">UPS</option>
+            <option value="fedex">FedEx</option>
+            <option value="amazon">Amazon Logistics</option>
+            <option value="sonstige">Sonstige</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div>
+          <label>Sendungsnummer (optional)</label>
+          <input type="text" id="s-tracking" placeholder="z. B. 0034…">
+        </div>
+        <div>
+          <label>Voraussichtliche Zustellung</label>
+          <input type="date" id="s-eta">
+        </div>
+      </div>
+      <label>Status</label>
+      <select id="s-status">
+        <option value="angekuendigt">Angekündigt</option>
+        <option value="unterwegs" selected>Unterwegs</option>
+        <option value="zustellung_heute">Zustellung heute</option>
+        <option value="zugestellt">Zugestellt</option>
+        <option value="problem">Problem / Verzögerung</option>
+      </select>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+        <button type="submit" class="btn-inline">Speichern</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Premium -->
+  <div class="modal" id="modal-premium" style="display:none">
+    <h3 style="text-align:center">Returix Premium</h3>
+    <p class="modal-sub" style="text-align:center">Wissen über dich selbst — shopübergreifend.</p>
+    <div class="price-line"><span class="price-big">2,99&nbsp;€</span><span class="price-per">/ Monat</span></div>
+    <p class="price-alt">oder 24,99 € im Jahr (≈ 2,08 €/Monat, 30 % gespart) · monatlich kündbar</p>
+    <div class="prem-list">
+      <div class="prem-item">
+        <div class="prem-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div>
+          <div class="prem-title">Unbegrenzte Bestellungen &amp; komplette Historie</div>
+          <div class="prem-desc">Alle Fristen gleichzeitig im Blick, deine gesamte Bestell-Vergangenheit durchsuchbar. <em>Free: nur 5 aktive Bestellungen, 30 Tage Historie.</em></div>
+        </div>
+      </div>
+      <div class="prem-item">
+        <div class="prem-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4-2.5 5.5S15 17.5 15 19H9c0-1.5-.5-3-1.5-4.5S5 11.5 5 9a7 7 0 0 1 7-7z"/><path d="M9 22h6"/></svg></div>
+        <div>
+          <div class="prem-title">Dreifache Erinnerung: 7, 3 und 1 Tag vor Ablauf</div>
+          <div class="prem-desc">Keine Frist läuft mehr unbemerkt ab — im Schnitt rettet das den Wert einer Bestellung pro Jahr. <em>Free: eine Erinnerung, 3 Tage vorher.</em></div>
+        </div>
+      </div>
+      <div class="prem-item">
+        <div class="prem-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></div>
+        <div>
+          <div class="prem-title">Garantie-Tresor</div>
+          <div class="prem-desc">Belege archivieren, 2 Jahre Gewährleistung und Herstellergarantien mit Ablauf-Countdown — auch für Elektronik und Möbel. Dein Kaufarchiv wächst über Jahre mit.</div>
+        </div>
+      </div>
+      <div class="prem-item">
+        <div class="prem-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg></div>
+        <div>
+          <div class="prem-title">Paket-Tracking</div>
+          <div class="prem-desc">Alle Lieferungen und Retouren-Sendungen shopübergreifend in einem Dashboard — mit direktem Link zur Sendungsverfolgung von DHL, Hermes, DPD &amp; Co.</div>
+        </div>
+      </div>
+      <div class="prem-item">
+        <div class="prem-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+        <div>
+          <div class="prem-title">Ausgaben-Insights</div>
+          <div class="prem-desc">Dein Shopping-Jahr in Zahlen: Ausgaben pro Monat, Retourenquote, erhaltene Erstattungen, Top-Shops und deine häufigsten Retouren-Gründe.</div>
+        </div>
+      </div>
+    </div>
+    <div class="prem-roi">Rechnet sich schnell: <strong>Eine gerettete Rückgabefrist</strong> (Ø-Bestellwert ~60 €) zahlt fast zwei Jahre Premium.</div>
+    <div class="modal-actions" style="justify-content:center">
+      <button class="btn-secondary" onclick="closeModal()">Später</button>
+      <button class="btn-inline" id="premium-cta" onclick="activatePremium()">Premium aktivieren</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:var(--muted-grey);margin-top:14px">Testphase: Aktivierung sofort, Bezahlung wird bei Marktstart eingerichtet.</p>
+  </div>
+
+  <!-- Onboarding-Wizard -->
+  <div class="modal" id="modal-onboarding" style="display:none;text-align:center">
+    <div class="onb-dots" id="onb-dots"></div>
+    <div id="onb-body"></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   RETURIX B2C — App-Logik
+   Backend: Supabase (Auth + Postgres mit RLS)
+   Alle Daten gehören dem eingeloggten Nutzer.
+═══════════════════════════════════════════ */
+
+const SUPABASE_URL = 'https://bbhxtsvjfwmifihxpknn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gyicpJQokncGqyWDvFsYUw_AR2QQ-FH'; // Publishable Key — für Client-Apps vorgesehen, Schutz über RLS
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const FREE_MAX_ACTIVE = 5;      // Free: max. 5 aktive Bestellungen
+const FREE_HISTORY_DAYS = 30;   // Free: 30 Tage Historie
+
+// ── State ──
+const state = {
+  user: null,
+  profile: null,
+  orders: [],
+  returns: [],
+  warranties: [],
+  shipments: [],
+  orderFilter: 'alle',
+  authMode: 'login',
+};
+
+// ── Helpers ──
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtEur = (n) => (n == null || isNaN(n)) ? '—' : Number(n).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+const fmtDate = (d) => d ? new Date(d + (String(d).length === 10 ? 'T12:00:00' : '')).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+const todayStr = () => new Date().toISOString().slice(0, 10);
+function daysUntil(dateStr) {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const d = new Date(dateStr + 'T00:00:00');
+  return Math.round((d - t) / 86400000);
+}
+function addMonths(dateStr, months) {
+  const d = new Date(dateStr + 'T12:00:00');
+  d.setMonth(d.getMonth() + Number(months));
+  return d.toISOString().slice(0, 10);
+}
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 3200);
+}
+const isPremium = () => state.profile?.plan === 'premium';
+
+const TRACKING_URLS = {
+  dhl:    (n) => `https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode=${encodeURIComponent(n)}`,
+  hermes: (n) => `https://www.myhermes.de/empfangen/sendungsverfolgung/sendungsinformation/#${encodeURIComponent(n)}`,
+  dpd:    (n) => `https://tracking.dpd.de/status/de_DE/parcel/${encodeURIComponent(n)}`,
+  gls:    (n) => `https://gls-group.eu/DE/de/paketverfolgung?match=${encodeURIComponent(n)}`,
+  ups:    (n) => `https://www.ups.com/track?tracknum=${encodeURIComponent(n)}`,
+  fedex:  (n) => `https://www.fedex.com/fedextrack/?trknbr=${encodeURIComponent(n)}`,
+};
+const CARRIER_NAMES = { dhl: 'DHL', hermes: 'Hermes', dpd: 'DPD', gls: 'GLS', ups: 'UPS', fedex: 'FedEx', amazon: 'Amazon', sonstige: 'Sonstige' };
+const SHIP_STATUS = {
+  angekuendigt:     { label: 'Angekündigt',      cls: 'off' },
+  unterwegs:        { label: 'Unterwegs',        cls: 'warn' },
+  zustellung_heute: { label: 'Zustellung heute', cls: 'warn' },
+  zugestellt:       { label: 'Zugestellt',       cls: 'ok' },
+  problem:          { label: 'Problem',          cls: 'bad' },
+};
+const CATEGORY_NAMES = { elektronik: 'Elektronik', moebel: 'Möbel', haushalt: 'Haushalt', fashion: 'Fashion', sonstiges: 'Sonstiges' };
+
+// ═══════════════ AUTH ═══════════════
+function setAuthMode(mode) {
+  state.authMode = mode;
+  $('tab-login').classList.toggle('active', mode === 'login');
+  $('tab-signup').classList.toggle('active', mode === 'signup');
+  $('auth-name').style.display = mode === 'signup' ? 'block' : 'none';
+  $('auth-submit').textContent = mode === 'signup' ? 'Konto erstellen →' : 'Anmelden →';
+  $('auth-forgot').style.display = mode === 'signup' ? 'none' : 'block';
+  $('auth-password').autocomplete = mode === 'signup' ? 'new-password' : 'current-password';
+  authNotice('');
+}
+function authNotice(msg, isError = false) {
+  const n = $('auth-notice');
+  n.textContent = msg;
+  n.classList.toggle('show', !!msg);
+  n.classList.toggle('error', isError);
+}
+async function handleAuth(e) {
+  e.preventDefault();
+  const email = $('auth-email').value.trim();
+  const password = $('auth-password').value;
+  const btn = $('auth-submit');
+  btn.disabled = true;
+  try {
+    if (state.authMode === 'signup') {
+      const name = $('auth-name').value.trim();
+      const redirectTo = window.location.origin.startsWith('http') ? window.location.origin + window.location.pathname : undefined;
+      const { data, error } = await db.auth.signUp({ email, password, options: { data: { name }, emailRedirectTo: redirectTo } });
+      if (error) throw error;
+      if (!data.session) {
+        showOtpBlock(email);
+        authNotice('Fast geschafft! Wir haben dir eine E-Mail geschickt — gib den 6-stelligen Code hier ein (oder klick den Link in der Mail).');
+      }
+      // Bei deaktivierter Bestätigung: Session vorhanden → onAuthStateChange übernimmt
+    } else {
+      const { error } = await db.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    }
+  } catch (err) {
+    let msg = err.message;
+    if (/confirm/i.test(err.message)) {
+      msg = 'Bitte bestätige zuerst deine E-Mail-Adresse — gib den Code aus der Mail ein.';
+      showOtpBlock(email);
+    } else if (/invalid/i.test(err.message)) msg = 'E-Mail oder Passwort ist falsch.';
+    else if (/already registered/i.test(err.message)) msg = 'Diese E-Mail ist bereits registriert — melde dich an.';
+    authNotice(msg, true);
+  } finally {
+    btn.disabled = false;
+  }
+  return false;
+}
+// ── OTP-Code-Bestätigung (Registrierung) ──
+let pendingOtpEmail = null;
+function showOtpBlock(email) {
+  pendingOtpEmail = email;
+  $('otp-block').style.display = 'block';
+  $('auth-form').style.display = 'none';
+  $('auth-forgot').style.display = 'none';
+  $('otp-code').focus();
+}
+function hideOtpBlock() {
+  $('otp-block').style.display = 'none';
+  $('auth-form').style.display = '';
+  $('auth-forgot').style.display = state.authMode === 'signup' ? 'none' : 'block';
+}
+async function verifyOtpCode() {
+  const token = $('otp-code').value.trim();
+  if (token.length < 6) { authNotice('Bitte den 6-stelligen Code aus der E-Mail eingeben.', true); return; }
+  const { error } = await db.auth.verifyOtp({ email: pendingOtpEmail, token, type: 'signup' });
+  if (error) {
+    // Falls das Konto schon bestätigt wurde oder der Code als E-Mail-OTP zählt:
+    const retry = await db.auth.verifyOtp({ email: pendingOtpEmail, token, type: 'email' });
+    if (retry.error) { authNotice('Code ungültig oder abgelaufen — fordere unten einen neuen an.', true); return; }
+  }
+  hideOtpBlock();
+  authNotice('');
+  toast('E-Mail bestätigt — willkommen bei Returix!');
+  // Session ist jetzt aktiv → onAuthStateChange öffnet die App
+}
+async function resendCode() {
+  if (!pendingOtpEmail) return;
+  const { error } = await db.auth.resend({ type: 'signup', email: pendingOtpEmail });
+  authNotice(error ? error.message : 'Neuer Code ist unterwegs — schau in dein Postfach.', !!error);
+}
+
+async function forgotPassword() {
+  const email = $('auth-email').value.trim();
+  if (!email) { authNotice('Gib zuerst deine E-Mail-Adresse ein.', true); return; }
+  const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] });
+  if (error) authNotice(error.message, true);
+  else authNotice('Wir haben dir einen Link zum Zurücksetzen geschickt.');
+}
+async function doLogout() {
+  await db.auth.signOut();
+  state.user = null; state.profile = null;
+  showScreen('auth');
+}
+function showScreen(name) {
+  $('screen-auth').classList.toggle('active', name === 'auth');
+  $('screen-app').classList.toggle('active', name === 'app');
+}
+
+db.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    const np = prompt('Neues Passwort festlegen (mind. 6 Zeichen):');
+    if (np && np.length >= 6) {
+      const { error } = await db.auth.updateUser({ password: np });
+      toast(error ? 'Fehler: ' + error.message : 'Passwort aktualisiert.');
+    }
+    return;
+  }
+  if (session?.user) {
+    state.user = session.user;
+    await enterApp();
+  } else if (event === 'SIGNED_OUT') {
+    showScreen('auth');
+  }
+});
+
+// ═══════════════ DATEN LADEN ═══════════════
+async function enterApp() {
+  showScreen('app');
+  $('user-badge').textContent = state.user.email;
+  await loadProfile();
+  await ensureAlias();
+  await loadAll();
+  renderAll();
+  maybeShowOnboarding();
+}
+
+// ═══════════════ POSTFACH-IMPORT & ONBOARDING ═══════════════
+const FORWARD_DOMAIN = 'in.returix.app';
+const ob = () => state.profile?.onboarding || {};
+
+async function ensureAlias() {
+  if (state.profile?.forward_alias) return;
+  for (let i = 0; i < 3; i++) {
+    const alias = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => 'abcdefghjkmnpqrstuvwxyz23456789'[b % 31]).join('');
+    const { error } = await db.from('profiles').update({ forward_alias: alias }).eq('id', state.user.id);
+    if (!error) { state.profile.forward_alias = alias; return; }
+  }
+}
+const aliasAddress = () => state.profile?.forward_alias ? `${state.profile.forward_alias}@${FORWARD_DOMAIN}` : '—';
+
+async function saveOnboarding(patch) {
+  const next = { ...ob(), ...patch };
+  state.profile.onboarding = next;
+  await db.from('profiles').update({ onboarding: next, updated_at: new Date().toISOString() }).eq('id', state.user.id);
+}
+function copyAlias() {
+  navigator.clipboard?.writeText(aliasAddress()).then(() => toast('Adresse kopiert.'), () => toast('Kopieren nicht möglich — bitte markieren und kopieren.'));
+}
+function toggleInstructions() {
+  const el = $('gmail-instructions');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+async function markMailboxLinked(fromWizard) {
+  if (!ob().mailbox) await db.from('linked_accounts').insert({ user_id: state.user.id, email: aliasAddress(), provider: 'forwarding' });
+  await saveOnboarding({ mailbox: true });
+  toast('Postfach-Anbindung vermerkt — der Import startet, sobald der Empfang freigeschaltet ist.');
+  renderAll();
+  if (fromWizard) onbGoto(2);
+}
+
+// Checklisten-Status (abgeleitet + gespeichert)
+function checklistState() {
+  return {
+    mailbox: !!ob().mailbox,
+    firstOrder: state.orders.length > 0,
+    fit: !!(state.profile?.height_cm || state.profile?.clothing_size),
+  };
+}
+
+// ── Wizard ──
+let onbStep = 1;
+function maybeShowOnboarding() {
+  if (ob().done || ob().dismissed) return;
+  const c = checklistState();
+  if (c.mailbox && c.firstOrder && c.fit) { saveOnboarding({ done: true }); return; }
+  onbGoto(1);
+  openModal('modal-onboarding');
+}
+function onbGoto(step) {
+  onbStep = step;
+  $('onb-dots').innerHTML = [1, 2, 3].map(i => `<div class="onb-dot ${i === step ? 'active' : ''}"></div>`).join('');
+  const bodies = {
+    1: `
+      <div class="onb-illu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></div>
+      <h3>Willkommen bei Returix!</h3>
+      <p class="modal-sub">Schritt 1: Verbinde dein Postfach — dann erfasst Returix Bestellungen und Rückgabefristen automatisch. <span class="beta-pill">Beta</span></p>
+      <p style="font-size:12.5px;color:var(--warm-grey)">Deine persönliche Weiterleitungs-Adresse:</p>
+      <div class="copy-field"><code>${esc(aliasAddress())}</code><button class="btn-mini" onclick="copyAlias()">Kopieren</button></div>
+      <div class="onb-instructions">
+        <ol>
+          <li>In Gmail: Einstellungen → „Weiterleitung" → diese Adresse hinzufügen.</li>
+          <li>Filter erstellen: „Von: zalando.de OR amazon.de OR otto.de" → „Weiterleiten an" diese Adresse.</li>
+          <li>Fertig — neue Bestellungen erscheinen automatisch im Dashboard.</li>
+        </ol>
+      </div>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="btn-secondary" onclick="onbGoto(2)">Später einrichten</button>
+        <button class="btn-inline" onclick="markMailboxLinked(true)">Habe ich eingerichtet ✓</button>
+      </div>`,
+    2: `
+      <div class="onb-illu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <h3>Deine erste Frist</h3>
+      <p class="modal-sub">Schritt 2: Erfasse eine aktuelle Bestellung — du siehst sofort, wie Returix die Rückgabefrist für dich mitzählt.</p>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="btn-secondary" onclick="onbGoto(3)">Überspringen</button>
+        <button class="btn-inline" onclick="closeModal(); openOrderModal()">+ Bestellung erfassen</button>
+      </div>
+      <p style="font-size:11.5px;color:var(--muted-grey);margin-top:10px">Tipp: Nimm die letzte Bestellbestätigung aus deinem Postfach.</p>`,
+    3: `
+      <div class="onb-illu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <h3>Dein Fit-Profil</h3>
+      <p class="modal-sub">Schritt 3: Hinterlege Größe und Konfektion — die Basis für persönliche Passform-Empfehlungen, damit Fehlkäufe gar nicht erst passieren.</p>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="btn-secondary" onclick="finishOnboarding(false)">Später</button>
+        <button class="btn-inline" onclick="finishOnboarding(true)">Zum Fit-Profil →</button>
+      </div>`,
+  };
+  $('onb-body').innerHTML = bodies[step];
+}
+async function finishOnboarding(goToProfile) {
+  await saveOnboarding({ dismissed: true });
+  closeModal();
+  if (goToProfile) { showView('profil'); $('fit-height')?.focus(); }
+  renderAll();
+}
+
+// ── Erste-Schritte-Checkliste (Dashboard) ──
+function renderChecklist() {
+  const el = $('dash-checklist');
+  const c = checklistState();
+  const doneCount = [c.mailbox, c.firstOrder, c.fit].filter(Boolean).length;
+  if (ob().hidden || ob().done || doneCount === 3) {
+    if (doneCount === 3 && !ob().done) saveOnboarding({ done: true });
+    el.innerHTML = '';
+    return;
+  }
+  const item = (done, title, sub, action, label) => `
+    <div class="check-item ${done ? 'done' : ''}">
+      <div class="check-mark">${done ? '✓' : ''}</div>
+      <div style="flex:1"><div class="check-title">${title}</div><div class="check-sub">${sub}</div></div>
+      ${done ? '' : `<button class="btn-mini green" onclick="${action}">${label}</button>`}
+    </div>`;
+  el.innerHTML = `<div class="card check-card">
+    <div class="check-head">
+      <div class="card-label" style="margin-bottom:0">Erste Schritte — so lohnt sich Returix richtig</div>
+      <div class="check-progress">${doneCount}/3 · <button class="link-btn" onclick="saveOnboarding({hidden:true}).then(renderChecklist)">Ausblenden</button></div>
+    </div>
+    <div style="margin-top:12px">
+      ${item(c.mailbox, 'Postfach anbinden', 'Bestellungen automatisch erfassen — nie wieder selbst eintragen.', "showView('profil')", 'Einrichten')}
+      ${item(c.firstOrder, 'Erste Bestellung erfassen', 'Sieh sofort, wie der Fristen-Countdown für dich arbeitet.', 'openOrderModal()', 'Erfassen')}
+      ${item(c.fit, 'Fit-Profil anlegen', 'Größe & Konfektion — Basis für Passform-Empfehlungen.', "showView('profil')", 'Ausfüllen')}
+    </div>
+  </div>`;
+}
+async function loadProfile() {
+  let { data } = await db.from('profiles').select('*').eq('id', state.user.id).maybeSingle();
+  if (!data) {
+    const name = state.user.user_metadata?.name || '';
+    const ins = await db.from('profiles').insert({ id: state.user.id, email: state.user.email, name }).select().single();
+    data = ins.data;
+  }
+  state.profile = data || { plan: 'free' };
+}
+async function loadAll() {
+  const [o, r, w, s] = await Promise.all([
+    db.from('orders').select('*').order('return_deadline', { ascending: true }),
+    db.from('returns').select('*').order('created_at', { ascending: false }),
+    db.from('warranties').select('*').order('purchase_date', { ascending: false }),
+    db.from('shipments').select('*').order('created_at', { ascending: false }),
+  ]);
+  state.orders = o.data || [];
+  state.returns = r.data || [];
+  state.warranties = w.data || [];
+  state.shipments = s.data || [];
+  for (const q of [o, r, w, s]) if (q.error) console.error(q.error);
+}
+function renderAll() {
+  updatePlanUI();
+  renderChecklist();
+  renderDashboard();
+  renderOrders();
+  renderWarranties();
+  renderShipments();
+  renderInsights();
+  renderProfile();
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  $('view-' + name).classList.add('active');
+  $('nav-' + name).classList.add('active');
+}
+
+// ═══════════════ PLAN / PREMIUM ═══════════════
+function updatePlanUI() {
+  const badge = $('plan-badge');
+  badge.textContent = isPremium() ? 'Premium' : 'Free';
+  badge.classList.toggle('premium', isPremium());
+  document.querySelectorAll('[data-premium-pill]').forEach(p => p.style.display = isPremium() ? 'none' : '');
+}
+function openPremiumModal() { if (!isPremium()) openModal('modal-premium'); else toast('Du hast bereits Premium. Danke!'); }
+async function activatePremium() {
+  const { error } = await db.from('profiles').update({ plan: 'premium' }).eq('id', state.user.id);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  state.profile.plan = 'premium';
+  closeModal();
+  toast('Premium aktiviert — viel Freude!');
+  renderAll();
+}
+function premiumLockHtml(featureName, desc) {
+  return `<div class="premium-lock">
+    <div class="premium-lock-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <h3>${esc(featureName)} ist ein Premium-Feature</h3>
+    <p>${esc(desc)}</p>
+    <button class="btn-inline" onclick="openPremiumModal()">Premium ansehen — 2,99 €/Monat</button>
+  </div>`;
+}
+
+// ═══════════════ MODALS ═══════════════
+function openModal(id) {
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+  $(id).style.display = 'block';
+  $('modal-overlay').classList.add('show');
+}
+function closeModal() { $('modal-overlay').classList.remove('show'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ═══════════════ BESTELLUNGEN ═══════════════
+function activeOrders() { return state.orders.filter(o => o.status === 'active'); }
+
+function openOrderModal(order = null) {
+  if (!order && !isPremium() && activeOrders().length >= FREE_MAX_ACTIVE) {
+    openPremiumModal();
+    toast(`Free-Plan: max. ${FREE_MAX_ACTIVE} aktive Bestellungen. Premium hebt das Limit auf.`);
+    return;
+  }
+  $('order-modal-title').textContent = order ? 'Bestellung bearbeiten' : 'Bestellung erfassen';
+  $('o-id').value = order?.id || '';
+  $('o-shop').value = order?.shop || '';
+  $('o-product').value = order?.product_name || '';
+  $('o-date').value = order?.order_date || todayStr();
+  $('o-deadline').value = order?.return_deadline || addMonths(todayStr(), 0).slice(0, 10);
+  if (!order) { const d = new Date(); d.setDate(d.getDate() + 14); $('o-deadline').value = d.toISOString().slice(0, 10); }
+  $('o-amount').value = order?.amount_eur ?? '';
+  $('o-number').value = order?.order_number || '';
+  openModal('modal-order');
+}
+async function saveOrder(e) {
+  e.preventDefault();
+  const id = $('o-id').value;
+  const row = {
+    user_id: state.user.id,
+    shop: $('o-shop').value.trim(),
+    product_name: $('o-product').value.trim(),
+    order_date: $('o-date').value,
+    return_deadline: $('o-deadline').value,
+    amount_eur: $('o-amount').value ? Number($('o-amount').value) : null,
+    order_number: $('o-number').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+  const q = id ? db.from('orders').update(row).eq('id', id) : db.from('orders').insert(row);
+  const { error } = await q;
+  if (error) { toast('Fehler: ' + error.message); return false; }
+  closeModal();
+  toast(id ? 'Bestellung aktualisiert.' : 'Bestellung erfasst — Frist läuft.');
+  await loadAll(); renderAll();
+  return false;
+}
+async function setOrderStatus(id, status) {
+  const { error } = await db.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  toast(status === 'kept' ? 'Als „behalten" markiert.' : 'Aktualisiert.');
+  await loadAll(); renderAll();
+}
+async function deleteOrder(id) {
+  if (!confirm('Bestellung wirklich löschen?')) return;
+  const { error } = await db.from('orders').delete().eq('id', id);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  toast('Bestellung gelöscht.');
+  await loadAll(); renderAll();
+}
+function editOrder(id) { const o = state.orders.find(x => x.id === id); if (o) openOrderModal(o); }
+
+// Retoure
+function openReturnModal(orderId) {
+  const o = state.orders.find(x => x.id === orderId);
+  if (!o) return;
+  $('r-order-id').value = orderId;
+  $('return-modal-sub').textContent = `${o.product_name} (${o.shop})`;
+  $('r-refund').value = o.amount_eur ?? '';
+  openModal('modal-return');
+}
+async function saveReturn(e) {
+  e.preventDefault();
+  const orderId = $('r-order-id').value;
+  const { error: e1 } = await db.from('returns').insert({
+    user_id: state.user.id,
+    order_id: orderId,
+    reason: $('r-reason').value,
+    status: 'sent',
+    refund_eur: $('r-refund').value ? Number($('r-refund').value) : null,
+    returned_at: todayStr(),
+  });
+  if (e1) { toast('Fehler: ' + e1.message); return false; }
+  await db.from('orders').update({ status: 'returned', updated_at: new Date().toISOString() }).eq('id', orderId);
+  closeModal();
+  toast('Retoure gespeichert — Erstattung wird getrackt.');
+  await loadAll(); renderAll();
+  return false;
+}
+async function markRefunded(returnId) {
+  const { error } = await db.from('returns').update({ status: 'refunded', updated_at: new Date().toISOString() }).eq('id', returnId);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  toast('Erstattung als erhalten markiert.');
+  await loadAll(); renderAll();
+}
+
+function deadlinePill(days) {
+  if (days < 0)  return `<div class="deadline-days off">abgelaufen</div>`;
+  if (days === 0) return `<div class="deadline-days bad">heute!</div>`;
+  if (days <= 3) return `<div class="deadline-days bad">${days} Tag${days > 1 ? 'e' : ''}</div>`;
+  if (days <= 7) return `<div class="deadline-days warn">${days} Tage</div>`;
+  return `<div class="deadline-days ok">${days} Tage</div>`;
+}
+
+// ═══════════════ RENDER: DASHBOARD ═══════════════
+function renderDashboard() {
+  const name = state.profile?.name?.split(' ')[0];
+  $('dash-greeting').textContent = name ? `Hallo ${name}.` : 'Deine Fristen';
+
+  const act = activeOrders().filter(o => daysUntil(o.return_deadline) >= 0);
+  const urgent = act.filter(o => daysUntil(o.return_deadline) <= 3);
+  const openRefunds = state.returns.filter(r => r.status === 'sent' || r.status === 'pending');
+  const refundSum = openRefunds.reduce((s, r) => s + (Number(r.refund_eur) || 0), 0);
+  const year = new Date().getFullYear();
+  const yearOrders = state.orders.filter(o => o.order_date && new Date(o.order_date).getFullYear() === year);
+  const yearSum = yearOrders.reduce((s, o) => s + (Number(o.amount_eur) || 0), 0);
+
+  $('dash-kpis').innerHTML = `
+    <div class="kpi-card"><div class="kpi-label">Aktive Fristen</div><div class="kpi-value">${act.length}</div><div class="kpi-sub">Bestellungen mit Rückgabe-Option</div></div>
+    <div class="kpi-card"><div class="kpi-label">Läuft bald ab</div><div class="kpi-value ${urgent.length ? 'red' : 'green'}">${urgent.length}</div><div class="kpi-sub">Frist ≤ 3 Tage</div></div>
+    <div class="kpi-card"><div class="kpi-label">Offene Erstattungen</div><div class="kpi-value ${refundSum ? 'amber' : ''}">${fmtEur(refundSum)}</div><div class="kpi-sub">${openRefunds.length} Retoure${openRefunds.length === 1 ? '' : 'n'} unterwegs</div></div>
+    <div class="kpi-card"><div class="kpi-label">Bestellt ${year}</div><div class="kpi-value">${fmtEur(yearSum)}</div><div class="kpi-sub">${yearOrders.length} Bestellungen</div></div>`;
+
+  // Free-Limit-Hinweis
+  const freeNote = $('dash-free-note');
+  if (!isPremium() && activeOrders().length >= FREE_MAX_ACTIVE) {
+    freeNote.innerHTML = `<div class="free-limit-note">Free-Plan: ${activeOrders().length}/${FREE_MAX_ACTIVE} aktive Bestellungen belegt. <button class="link-btn" onclick="openPremiumModal()">Premium aufheben →</button></div>`;
+  } else freeNote.innerHTML = '';
+
+  // Fristen-Liste
+  const list = state.orders
+    .filter(o => o.status === 'active')
+    .sort((a, b) => a.return_deadline.localeCompare(b.return_deadline));
+  $('dash-deadlines').innerHTML = list.length ? list.map(o => {
+    const d = daysUntil(o.return_deadline);
+    return `<div class="deadline-row">
+      ${deadlinePill(d)}
+      <div class="deadline-main">
+        <div class="deadline-title">${esc(o.product_name)}</div>
+        <div class="deadline-meta">${esc(o.shop)} · bestellt ${fmtDate(o.order_date)} · Frist bis ${fmtDate(o.return_deadline)}</div>
+      </div>
+      <div class="deadline-amount">${fmtEur(o.amount_eur)}</div>
+      <div class="deadline-actions">
+        <button class="btn-mini red" onclick="openReturnModal('${o.id}')">Retoure</button>
+        <button class="btn-mini green" onclick="setOrderStatus('${o.id}','kept')">Behalten</button>
+      </div>
+    </div>`;
+  }).join('') : `<div class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <h3>Keine laufenden Fristen</h3>
+      <p>Erfasse deine erste Bestellung — Returix zählt die Rückgabefrist ab sofort mit.</p>
+      <button class="btn-inline" onclick="openOrderModal()">+ Bestellung erfassen</button>
+    </div>`;
+
+  // Offene Erstattungen
+  const card = $('dash-refunds-card');
+  if (openRefunds.length) {
+    card.style.display = 'block';
+    $('dash-refunds').innerHTML = openRefunds.map(r => {
+      const o = state.orders.find(x => x.id === r.order_id);
+      const days = r.returned_at ? Math.abs(daysUntil(r.returned_at)) : 0;
+      const overdue = days >= 14;
+      return `<div class="deadline-row">
+        <div class="deadline-days ${overdue ? 'bad' : 'warn'}">${days} Tg.</div>
+        <div class="deadline-main">
+          <div class="deadline-title">${esc(o?.product_name || 'Retoure')}</div>
+          <div class="deadline-meta">${esc(o?.shop || '')} · zurückgeschickt ${fmtDate(r.returned_at)}${overdue ? ' · <strong style="color:var(--red)">über 14 Tage — beim Shop nachhaken!</strong>' : ''}</div>
+        </div>
+        <div class="deadline-amount">${fmtEur(r.refund_eur)}</div>
+        <div class="deadline-actions"><button class="btn-mini green" onclick="markRefunded('${r.id}')">Geld erhalten ✓</button></div>
+      </div>`;
+    }).join('');
+  } else card.style.display = 'none';
+}
+
+// ═══════════════ RENDER: BESTELLUNGEN ═══════════════
+function setOrderFilter(f) {
+  state.orderFilter = f;
+  document.querySelectorAll('#order-filters .filter-chip').forEach(c => c.classList.toggle('active', c.dataset.f === f));
+  renderOrders();
+}
+function renderOrders() {
+  let rows = [...state.orders];
+  if (state.orderFilter !== 'alle') rows = rows.filter(o => o.status === state.orderFilter);
+
+  // Free: Historie auf 30 Tage begrenzen (abgeschlossene Bestellungen)
+  let hiddenCount = 0;
+  if (!isPremium()) {
+    const before = rows.length;
+    rows = rows.filter(o => o.status === 'active' || Math.abs(daysUntil(o.order_date)) <= FREE_HISTORY_DAYS);
+    hiddenCount = before - rows.length;
+  }
+
+  const statusPill = (o) => {
+    if (o.status === 'active') { const d = daysUntil(o.return_deadline); return d < 0 ? '<span class="status-pill off">Frist abgelaufen</span>' : `<span class="status-pill ${d <= 3 ? 'bad' : d <= 7 ? 'warn' : 'ok'}">Frist läuft (${d} Tg.)</span>`; }
+    if (o.status === 'returned') { const r = state.returns.find(x => x.order_id === o.id); return r?.status === 'refunded' ? '<span class="status-pill ok">Erstattet</span>' : '<span class="status-pill warn">Retourniert</span>'; }
+    if (o.status === 'kept') return '<span class="status-pill ok">Behalten</span>';
+    return '<span class="status-pill off">Abgelaufen</span>';
+  };
+
+  $('orders-table').innerHTML = rows.length ? `<table class="data-table">
+    <thead><tr><th>Produkt</th><th>Shop</th><th>Bestellt</th><th>Frist bis</th><th class="num">Betrag</th><th>Status</th><th></th></tr></thead>
+    <tbody>${rows.map(o => `<tr>
+      <td>${esc(o.product_name)}</td>
+      <td>${esc(o.shop)}</td>
+      <td>${fmtDate(o.order_date)}</td>
+      <td>${fmtDate(o.return_deadline)}</td>
+      <td class="num">${fmtEur(o.amount_eur)}</td>
+      <td>${statusPill(o)}</td>
+      <td style="white-space:nowrap">
+        ${o.status === 'active' ? `<button class="btn-mini red" onclick="openReturnModal('${o.id}')">Retoure</button> <button class="btn-mini green" onclick="setOrderStatus('${o.id}','kept')">Behalten</button> ` : ''}
+        <button class="btn-mini" onclick="editOrder('${o.id}')">Bearbeiten</button>
+        <button class="btn-mini red" onclick="deleteOrder('${o.id}')">Löschen</button>
+      </td>
+    </tr>`).join('')}</tbody></table>
+    ${hiddenCount ? `<div class="free-limit-note" style="margin-top:14px">${hiddenCount} ältere Bestellung${hiddenCount === 1 ? '' : 'en'} ausgeblendet — der Free-Plan zeigt ${FREE_HISTORY_DAYS} Tage Historie. <button class="link-btn" onclick="openPremiumModal()">Mit Premium alles sehen →</button></div>` : ''}`
+  : `<div class="empty-state" style="border:none">
+      <div class="empty-state-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+      <h3>Noch keine Bestellungen</h3>
+      <p>Erfasse deine Online-Bestellungen — Returix behält jede Rückgabefrist im Blick.</p>
+      <button class="btn-inline" onclick="openOrderModal()">+ Erste Bestellung erfassen</button>
+    </div>`;
+}
+
+// ═══════════════ RENDER: GARANTIE-TRESOR ═══════════════
+function openWarrantyModal(w = null) {
+  if (!isPremium()) { openPremiumModal(); return; }
+  $('warranty-modal-title').textContent = w ? 'Garantie bearbeiten' : 'Garantie sichern';
+  $('w-id').value = w?.id || '';
+  $('w-product').value = w?.product_name || '';
+  $('w-shop').value = w?.shop || '';
+  $('w-category').value = w?.category || 'elektronik';
+  $('w-date').value = w?.purchase_date || todayStr();
+  $('w-price').value = w?.price_eur ?? '';
+  $('w-months').value = w?.warranty_months ?? 24;
+  $('w-mfr').value = w?.manufacturer_warranty_months ?? '';
+  $('w-invoice').value = w?.invoice_ref || '';
+  openModal('modal-warranty');
+}
+async function saveWarranty(e) {
+  e.preventDefault();
+  const id = $('w-id').value;
+  const row = {
+    user_id: state.user.id,
+    product_name: $('w-product').value.trim(),
+    shop: $('w-shop').value.trim() || null,
+    category: $('w-category').value,
+    purchase_date: $('w-date').value,
+    price_eur: $('w-price').value ? Number($('w-price').value) : null,
+    warranty_months: Number($('w-months').value) || 24,
+    manufacturer_warranty_months: $('w-mfr').value ? Number($('w-mfr').value) : null,
+    invoice_ref: $('w-invoice').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+  const q = id ? db.from('warranties').update(row).eq('id', id) : db.from('warranties').insert(row);
+  const { error } = await q;
+  if (error) { toast('Fehler: ' + error.message); return false; }
+  closeModal();
+  toast('Im Garantie-Tresor gesichert.');
+  await loadAll(); renderAll();
+  return false;
+}
+async function deleteWarranty(id) {
+  if (!confirm('Eintrag wirklich löschen?')) return;
+  await db.from('warranties').delete().eq('id', id);
+  toast('Eintrag gelöscht.');
+  await loadAll(); renderAll();
+}
+function editWarranty(id) { const w = state.warranties.find(x => x.id === id); if (w) openWarrantyModal(w); }
+
+function warrantyBadge(expiry) {
+  const d = daysUntil(expiry);
+  if (d < 0)   return `<span class="status-pill off">abgelaufen ${fmtDate(expiry)}</span>`;
+  if (d <= 14) return `<span class="status-pill bad">läuft in ${d} Tagen ab!</span>`;
+  if (d <= 60) return `<span class="status-pill warn">noch ${d} Tage</span>`;
+  const months = Math.round(d / 30.44);
+  return `<span class="status-pill ok">noch ~${months} Monate</span>`;
+}
+function renderWarranties() {
+  const el = $('warranties-content');
+  $('warranty-add-btn').style.display = isPremium() ? '' : 'none';
+  if (!isPremium()) {
+    el.innerHTML = premiumLockHtml('Der Garantie-Tresor', 'Rechnungen archivieren, Gewährleistung und Herstellergarantie pro Produkt tracken — mit Erinnerung, bevor etwas abläuft. Auch für Elektronik und Möbel.');
+    return;
+  }
+  if (!state.warranties.length) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></div>
+      <h3>Dein Tresor ist noch leer</h3>
+      <p>Sichere Käufe mit Rechnung und Garantielaufzeit — Returix erinnert dich, bevor Gewährleistung oder Garantie ablaufen.</p>
+      <button class="btn-inline" onclick="openWarrantyModal()">+ Ersten Kauf sichern</button>
+    </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="card"><div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Produkt</th><th>Kategorie</th><th>Gekauft</th><th class="num">Preis</th><th>Gewährleistung</th><th>Herstellergarantie</th><th></th></tr></thead>
+    <tbody>${state.warranties.map(w => {
+      const gewEnd = addMonths(w.purchase_date, w.warranty_months);
+      const mfrEnd = w.manufacturer_warranty_months ? addMonths(w.purchase_date, w.manufacturer_warranty_months) : null;
+      return `<tr>
+        <td><strong style="font-weight:500">${esc(w.product_name)}</strong>${w.shop ? `<br><span style="font-size:11.5px;color:var(--muted-grey)">${esc(w.shop)}${w.invoice_ref ? ' · Beleg: ' + esc(w.invoice_ref) : ''}</span>` : (w.invoice_ref ? `<br><span style="font-size:11.5px;color:var(--muted-grey)">Beleg: ${esc(w.invoice_ref)}</span>` : '')}</td>
+        <td>${CATEGORY_NAMES[w.category] || esc(w.category)}</td>
+        <td>${fmtDate(w.purchase_date)}</td>
+        <td class="num">${fmtEur(w.price_eur)}</td>
+        <td>${warrantyBadge(gewEnd)}</td>
+        <td>${mfrEnd ? warrantyBadge(mfrEnd) : '<span style="color:var(--muted-grey)">—</span>'}</td>
+        <td style="white-space:nowrap"><button class="btn-mini" onclick="editWarranty('${w.id}')">Bearbeiten</button> <button class="btn-mini red" onclick="deleteWarranty('${w.id}')">Löschen</button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div></div>`;
+}
+
+// ═══════════════ RENDER: PAKETE ═══════════════
+function openShipmentModal(s = null) {
+  if (!isPremium()) { openPremiumModal(); return; }
+  $('shipment-modal-title').textContent = s ? 'Sendung bearbeiten' : 'Sendung hinzufügen';
+  $('s-id').value = s?.id || '';
+  $('s-label').value = s?.label || '';
+  $('s-direction').value = s?.direction || 'inbound';
+  $('s-carrier').value = s?.carrier || 'dhl';
+  $('s-tracking').value = s?.tracking_number || '';
+  $('s-eta').value = s?.eta || '';
+  $('s-status').value = s?.status || 'unterwegs';
+  openModal('modal-shipment');
+}
+async function saveShipment(e) {
+  e.preventDefault();
+  const id = $('s-id').value;
+  const row = {
+    user_id: state.user.id,
+    label: $('s-label').value.trim(),
+    direction: $('s-direction').value,
+    carrier: $('s-carrier').value,
+    tracking_number: $('s-tracking').value.trim() || null,
+    eta: $('s-eta').value || null,
+    status: $('s-status').value,
+    delivered_at: $('s-status').value === 'zugestellt' ? todayStr() : null,
+    updated_at: new Date().toISOString(),
+  };
+  const q = id ? db.from('shipments').update(row).eq('id', id) : db.from('shipments').insert(row);
+  const { error } = await q;
+  if (error) { toast('Fehler: ' + error.message); return false; }
+  closeModal();
+  toast('Sendung gespeichert.');
+  await loadAll(); renderAll();
+  return false;
+}
+async function markDelivered(id) {
+  await db.from('shipments').update({ status: 'zugestellt', delivered_at: todayStr(), updated_at: new Date().toISOString() }).eq('id', id);
+  toast('Als zugestellt markiert.');
+  await loadAll(); renderAll();
+}
+async function deleteShipment(id) {
+  if (!confirm('Sendung wirklich löschen?')) return;
+  await db.from('shipments').delete().eq('id', id);
+  await loadAll(); renderAll();
+}
+function editShipment(id) { const s = state.shipments.find(x => x.id === id); if (s) openShipmentModal(s); }
+
+function renderShipments() {
+  const el = $('shipments-content');
+  $('shipment-add-btn').style.display = isPremium() ? '' : 'none';
+  if (!isPremium()) {
+    el.innerHTML = premiumLockHtml('Paket-Tracking', 'Alle Lieferungen und Retouren-Sendungen shopübergreifend in einem Dashboard — mit direktem Link zur Sendungsverfolgung.');
+    return;
+  }
+  const active = state.shipments.filter(s => s.status !== 'zugestellt');
+  const done = state.shipments.filter(s => s.status === 'zugestellt');
+  const rowHtml = (s) => {
+    const st = SHIP_STATUS[s.status] || SHIP_STATUS.unterwegs;
+    const trackUrl = s.tracking_number && TRACKING_URLS[s.carrier] ? TRACKING_URLS[s.carrier](s.tracking_number) : null;
+    return `<div class="deadline-row">
+      <div class="deadline-days ${st.cls}">${s.direction === 'outbound' ? '↑ Retoure' : '↓ Lieferung'}</div>
+      <div class="deadline-main">
+        <div class="deadline-title">${esc(s.label)}</div>
+        <div class="deadline-meta">${CARRIER_NAMES[s.carrier] || s.carrier}${s.tracking_number ? ' · ' + esc(s.tracking_number) : ''}${s.eta ? ' · voraussichtlich ' + fmtDate(s.eta) : ''}${s.delivered_at ? ' · zugestellt ' + fmtDate(s.delivered_at) : ''}</div>
+      </div>
+      <span class="status-pill ${st.cls}">${st.label}</span>
+      <div class="deadline-actions">
+        ${trackUrl ? `<a class="btn-mini" style="text-decoration:none" href="${trackUrl}" target="_blank" rel="noopener">Verfolgen ↗</a>` : ''}
+        ${s.status !== 'zugestellt' ? `<button class="btn-mini green" onclick="markDelivered('${s.id}')">Zugestellt ✓</button>` : ''}
+        <button class="btn-mini" onclick="editShipment('${s.id}')">Bearbeiten</button>
+        <button class="btn-mini red" onclick="deleteShipment('${s.id}')">Löschen</button>
+      </div>
+    </div>`;
+  };
+  el.innerHTML = state.shipments.length
+    ? `<div class="card"><div class="card-label">Unterwegs (${active.length})</div>${active.length ? active.map(rowHtml).join('') : '<p style="font-size:13px;color:var(--muted-grey)">Gerade ist nichts unterwegs.</p>'}</div>
+       ${done.length ? `<div class="card"><div class="card-label">Zugestellt</div>${done.map(rowHtml).join('')}</div>` : ''}`
+    : `<div class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16.5 9.4L7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg></div>
+      <h3>Keine Sendungen</h3>
+      <p>Füge Lieferungen und Retouren-Pakete hinzu — alle Carrier in einer Übersicht.</p>
+      <button class="btn-inline" onclick="openShipmentModal()">+ Erste Sendung hinzufügen</button>
+    </div>`;
+}
+
+// ═══════════════ RENDER: INSIGHTS ═══════════════
+function renderInsights() {
+  const el = $('insights-content');
+  if (!isPremium()) {
+    el.innerHTML = premiumLockHtml('Ausgaben-Insights', '„Du hast dieses Jahr 1.840 € bei 12 Shops bestellt, 31 % retourniert." — dein Shopping-Jahr in Zahlen, inklusive Erstattungs-Bilanz.');
+    return;
+  }
+  const year = new Date().getFullYear();
+  const yo = state.orders.filter(o => o.order_date && new Date(o.order_date).getFullYear() === year);
+  const total = yo.reduce((s, o) => s + (Number(o.amount_eur) || 0), 0);
+  const shops = [...new Set(yo.map(o => o.shop))];
+  const returned = yo.filter(o => o.status === 'returned');
+  const quote = yo.length ? Math.round(returned.length / yo.length * 100) : 0;
+  const refunded = state.returns.filter(r => r.status === 'refunded').reduce((s, r) => s + (Number(r.refund_eur) || 0), 0);
+
+  if (!yo.length) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+      <h3>Noch keine Daten für ${year}</h3>
+      <p>Sobald du Bestellungen erfasst, entsteht hier dein Shopping-Jahr in Zahlen.</p>
+      <button class="btn-inline" onclick="openOrderModal()">+ Bestellung erfassen</button>
+    </div>`;
+    return;
+  }
+
+  // Monats-Chart (SVG, Stil wie Returix Business)
+  const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const byMonth = Array(12).fill(0);
+  yo.forEach(o => { byMonth[new Date(o.order_date).getMonth()] += Number(o.amount_eur) || 0; });
+  const max = Math.max(...byMonth, 1);
+  const W = 640, H = 220, pad = 28, bw = (W - pad * 2) / 12 - 8;
+  const bars = byMonth.map((v, i) => {
+    const h = Math.round((H - 60) * v / max);
+    const x = pad + i * ((W - pad * 2) / 12) + 4;
+    const y = H - 40 - h;
+    return `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="4" fill="${v ? 'var(--green)' : 'var(--stone)'}" opacity="${v ? 0.85 : 1}"/>
+      <text x="${x + bw / 2}" y="${H - 22}" text-anchor="middle" font-size="10" fill="var(--muted-grey)" font-family="Roboto">${months[i]}</text>
+      ${v ? `<text x="${x + bw / 2}" y="${y - 6}" text-anchor="middle" font-size="9.5" fill="var(--warm-grey)" font-family="Roboto">${Math.round(v)}€</text>` : ''}`;
+  }).join('');
+
+  // Retouren-Gründe
+  const reasons = {};
+  state.returns.forEach(r => { if (r.reason) reasons[r.reason] = (reasons[r.reason] || 0) + 1; });
+  const reasonRows = Object.entries(reasons).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const rMax = Math.max(...reasonRows.map(r => r[1]), 1);
+
+  // Top-Shops
+  const shopSums = {};
+  yo.forEach(o => { shopSums[o.shop] = (shopSums[o.shop] || 0) + (Number(o.amount_eur) || 0); });
+  const topShops = Object.entries(shopSums).sort((a, b) => b[1] - a[1]).slice(0, 6);
+
+  el.innerHTML = `
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Bestellt ${year}</div><div class="kpi-value">${fmtEur(total)}</div><div class="kpi-sub">${yo.length} Bestellungen bei ${shops.length} Shop${shops.length === 1 ? '' : 's'}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Retourenquote</div><div class="kpi-value ${quote > 40 ? 'red' : quote > 20 ? 'amber' : 'green'}">${quote}&nbsp;%</div><div class="kpi-sub">${returned.length} von ${yo.length} zurückgeschickt</div></div>
+      <div class="kpi-card"><div class="kpi-label">Erstattet</div><div class="kpi-value green">${fmtEur(refunded)}</div><div class="kpi-sub">Geld zurück erhalten</div></div>
+      <div class="kpi-card"><div class="kpi-label">Ø pro Bestellung</div><div class="kpi-value">${fmtEur(yo.length ? total / yo.length : 0)}</div><div class="kpi-sub">über alle Shops</div></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Ausgaben pro Monat (${year})</div>
+      <div class="chart-wrap"><svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ausgaben pro Monat">${bars}</svg></div>
+    </div>
+    <div class="dash-grid" style="margin-top:16px">
+      <div class="card">
+        <div class="card-label">Deine Retouren-Gründe</div>
+        ${reasonRows.length ? reasonRows.map(([name, n]) => `<div class="reason-row">
+          <div class="reason-name">${esc(name)}</div>
+          <div class="reason-track"><div class="reason-fill" style="width:${Math.round(n / rMax * 100)}%"></div></div>
+          <div class="reason-pct">${n}×</div>
+        </div>`).join('') : '<p style="font-size:13px;color:var(--muted-grey)">Noch keine Retouren dokumentiert.</p>'}
+      </div>
+      <div class="card">
+        <div class="card-label">Top-Shops nach Ausgaben</div>
+        <table class="data-table"><tbody>
+          ${topShops.map(([shop, sum]) => `<tr><td>${esc(shop)}</td><td class="num">${fmtEur(sum)}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>`;
+}
+
+// ═══════════════ RENDER: PROFIL ═══════════════
+function renderProfile() {
+  $('forward-alias-display').textContent = aliasAddress();
+  $('mailbox-status').innerHTML = ob().mailbox
+    ? '<span class="status-pill ok">Weiterleitung eingerichtet</span> <span style="font-size:11.5px;color:var(--muted-grey)">Der automatische Empfang wird in Kürze freigeschaltet — deine Adresse ist reserviert.</span>'
+    : '<span class="status-pill off">Noch nicht eingerichtet</span>';
+  $('profile-name').value = state.profile?.name || '';
+  $('profile-email').textContent = state.user?.email || '—';
+  $('profile-plan-desc').textContent = isPremium()
+    ? 'Returix Premium — unbegrenzte Bestellungen, Garantie-Tresor, Paket-Tracking, Insights.'
+    : `Returix Free — bis zu ${FREE_MAX_ACTIVE} aktive Bestellungen, ${FREE_HISTORY_DAYS} Tage Historie.`;
+  $('profile-plan-btn').style.display = isPremium() ? 'none' : '';
+  $('fit-height').value = state.profile?.height_cm ?? '';
+  $('fit-weight').value = state.profile?.weight_kg ?? '';
+  $('fit-size').value = state.profile?.clothing_size ?? '';
+  $('fit-shoe').value = state.profile?.shoe_size ?? '';
+}
+async function saveProfile() {
+  const name = $('profile-name').value.trim();
+  const { error } = await db.from('profiles').update({ name, updated_at: new Date().toISOString() }).eq('id', state.user.id);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  state.profile.name = name;
+  toast('Gespeichert.');
+  renderDashboard();
+}
+async function saveFitProfile() {
+  const upd = {
+    height_cm: $('fit-height').value ? Number($('fit-height').value) : null,
+    weight_kg: $('fit-weight').value ? Number($('fit-weight').value) : null,
+    clothing_size: $('fit-size').value.trim() || null,
+    shoe_size: $('fit-shoe').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await db.from('profiles').update(upd).eq('id', state.user.id);
+  if (error) { toast('Fehler: ' + error.message); return; }
+  Object.assign(state.profile, upd);
+  toast('Fit-Profil gespeichert.');
+}
+
+// ═══════════════ INIT ═══════════════
+(async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (session?.user) { state.user = session.user; await enterApp(); }
+})();
+</script>
+</body>
+</html>
