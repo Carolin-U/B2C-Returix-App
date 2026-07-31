@@ -1,0 +1,22 @@
+name: Returix Mail-Import
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install imapflow@1 mailparser@3
+      - run: node scripts/mail-import.mjs
+        env:
+          IMAP_HOST: imap.strato.de
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASS: ${{ secrets.IMAP_PASS }}
+          INBOUND_URL: ${{ secrets.INBOUND_URL }}
