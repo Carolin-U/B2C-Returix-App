@@ -8,13 +8,14 @@ on:
 jobs:
   import:
     runs-on: ubuntu-latest
+    timeout-minutes: 5   # nie wieder 40 Minuten hängen
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm install imapflow@1 mailparser@3
-      - run: node scripts/mail-import_V2.mjs   # V1 bleibt als scripts/mail-import.mjs erhalten
+      - run: node scripts/mail-import_V3.mjs   # V1 und V2 bleiben im Ordner scripts erhalten
         env:
           IMAP_HOST: imap.strato.de
           IMAP_USER: ${{ secrets.IMAP_USER }}
