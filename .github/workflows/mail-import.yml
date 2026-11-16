@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 20
       - run: npm install imapflow@1 mailparser@3
-      - run: node scripts/mail-import.mjs
+      - run: node scripts/mail-import_V2.mjs   # V1 bleibt als scripts/mail-import.mjs erhalten
         env:
           IMAP_HOST: imap.strato.de
           IMAP_USER: ${{ secrets.IMAP_USER }}
